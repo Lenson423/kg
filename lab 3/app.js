@@ -31,14 +31,12 @@ function clearAndDrawGrid() {
         ctx.fillText(x / cellSize, x + 2, 12);
     }
 
-    // Рисуем горизонтальные линии и метки по оси Y
     for (let y = 0; y < canvas.height; y += cellSize) {
         ctx.beginPath();
         ctx.moveTo(0, y);
         ctx.lineTo(canvas.width, y);
         ctx.stroke();
 
-        // Подпись по оси Y
         ctx.fillStyle = "black";
         ctx.fillText(y / cellSize, 2, y + 12);
     }
