@@ -20,17 +20,27 @@ function updateGridSize() {
 function clearAndDrawGrid() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = "#d3d3d3";
+
     for (let x = 0; x < canvas.width; x += cellSize) {
         ctx.beginPath();
         ctx.moveTo(x, 0);
         ctx.lineTo(x, canvas.height);
         ctx.stroke();
+
+        ctx.fillStyle = "black";
+        ctx.fillText(x / cellSize, x + 2, 12);
     }
+
+    // Рисуем горизонтальные линии и метки по оси Y
     for (let y = 0; y < canvas.height; y += cellSize) {
         ctx.beginPath();
         ctx.moveTo(0, y);
         ctx.lineTo(canvas.width, y);
         ctx.stroke();
+
+        // Подпись по оси Y
+        ctx.fillStyle = "black";
+        ctx.fillText(y / cellSize, 2, y + 12);
     }
 }
 
@@ -181,7 +191,6 @@ clearAndDrawGrid();
 
 //function testAlgorithms() {
 //    const numberOfTests = 100000;
-//    const maxDistance = 1000000;
 //
 //    const results = {
 //        step: [],
