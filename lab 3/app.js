@@ -150,7 +150,7 @@ function bresenhamLine(x0, y0, x1, y1) {
 }
 
 function bresenhamCircle(xc, yc, r) {
-    ctx.fillStyle = 'green';
+    ctx.fillStyle = 'brown';
     let x = 0;
     let y = Math.round(r);
     let d = 3 - 2 * Math.round(r);
