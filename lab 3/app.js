@@ -96,19 +96,49 @@ function draw() {
 
 function stepAlgorithm(x0, y0, x1, y1) {
     ctx.fillStyle = 'black';
-    const dx = x1 - x0;
-    const dy = y1 - y0;
-    const steps = Math.max(Math.abs(dx), Math.abs(dy));
-    const xIncrement = dx / steps;
-    const yIncrement = dy / steps;
+    const startTime = performance.now();
+    const dx = Math.abs(x1 - x0);
+    console.log(`Вычисляем dx: ${dx} клеток`);
+    const dy = Math.abs(y1 - y0);
+    const sx = x0 < x1 ? 1 : -1;
+    console.log(`Вычисляем dy: ${dy} клеток`);
+    const sy = y0 < y1 ? 1 : -1;
+
     let x = x0,
         y = y0;
-    for (let i = 0; i <= steps; i++) {
-        ctx.fillRect(Math.round(x) * cellSize, Math.round(y) * cellSize, cellSize, cellSize);
-        x += xIncrement;
-        y += yIncrement;
+
+    if (dx > dy) {
+        console.log(`x - доминирующая ось`);
+        let error = dx / 2;
+        for (let i = 0; i <= dx; i++) {
+            console.log(`Красим клетку (${Math.round(x)} ${Math.round(y)})`);
+            ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+            x += sx;
+            error -= dy;
+            if (error < 0) {
+                y += sy;
+                error += dx;
+            }
+        }
+    } else {
+        console.log(`y - доминирующая ось`);
+        let error = dy / 2;
+        for (let i = 0; i <= dy; i++) {
+            console.log(`Красим клетку (${Math.round(x)} ${Math.round(y)})`);
+            ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+            y += sy;
+            error -= dx;
+            if (error < 0) {
+                x += sx;
+                error += dy;
+            }
+        }
     }
+    const endTime = performance.now();
+    const averageTime = (endTime - startTime) * 1000;
+    console.log(`Время выполнения для пошагового алгоритма: ${averageTime.toFixed(2)} микросекунд`);
 }
+
 
 function ddaAlgorithm(x0, y0, x1, y1) {
     ctx.fillStyle = 'red';
@@ -153,17 +183,17 @@ function bresenhamCircle(xc, yc, r) {
     ctx.fillStyle = 'brown';
     let x = 0;
     let y = Math.round(r);
-    let d = 3 - 2 * Math.round(r);
+    let d = 3 - 2 * r;
     drawCirclePoints(xc, yc, x, y);
 
     while (y >= x) {
-        x++;
         if (d > 0) {
-            y--;
             d = d + 4 * (x - y) + 10;
+            y--;
         } else {
             d = d + 4 * x + 6;
         }
+        x++;
         drawCirclePoints(xc, yc, x, y);
     }
 }
@@ -181,7 +211,13 @@ function drawCirclePoints(xc, yc, x, y) {
 
 const h = window.innerHeight;
 const w = window.innerWidth;
-const size = Math.floor(0.7 * Math.min(h, w));
+
+let size = 0;
+if (w < 1000) {
+    size = Math.floor(0.5 * Math.min(h, w));
+} else {
+    size = Math.floor(0.7 * Math.min(h, w));
+}
 canvas.width = size;
 canvas.height = size;
 clearAndDrawGrid();
